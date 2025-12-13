@@ -295,7 +295,7 @@ function drawMinuteTicks(ctx, radius, fgcolor = "gray") {
  * @param {number} radius - Straal van de klok
  */
 function drawNumbers(ctx, radius, fgcolor = "white") {
-  ctx.font = `${radius * 0.13}px Arial`;
+  ctx.font = `${radius * 0.11}px Arial`;
   ctx.textBaseline = "middle";
   ctx.textAlign = "center";
   ctx.fillStyle = fgcolor; // "#ffffff";
@@ -304,8 +304,8 @@ function drawNumbers(ctx, radius, fgcolor = "white") {
 
   for (let i = 0; i < 12; i++) {
     let angle = (i * Math.PI) / 6 - Math.PI / 2;
-    let x = Math.cos(angle) * radius * 0.68;
-    let y = Math.sin(angle) * radius * 0.68;
+    let x = Math.cos(angle) * radius * 0.73;
+    let y = Math.sin(angle) * radius * 0.73;
 
     ctx.fillText(numbers[i].toString(), x, y);
   }
@@ -329,12 +329,12 @@ function drawTime(ctx, radius, bgcolor = "black", fgcolor = "red") {
     (minute * Math.PI) / (6 * 60) +
     (second * Math.PI) / (360 * 60) -
     Math.PI / 2;
-  drawHand(ctx, hourPos, radius * 0.45, radius * 0.035, bgcolor, fgcolor);
+  drawHand(ctx, hourPos, radius * 0.55, radius * 0.035, bgcolor, fgcolor);
 
   // Minuutwijzer
   let minutePos =
     (minute * Math.PI) / 30 + (second * Math.PI) / (30 * 60) - Math.PI / 2;
-  drawHand(ctx, minutePos, radius * 0.65, radius * 0.025, bgcolor, fgcolor);
+  drawHand(ctx, minutePos, radius * 0.70, radius * 0.025, bgcolor, fgcolor);
 
   // Secondewijzer (dun en rood, zoals chronograaf)
   let secondPos =
