@@ -19,7 +19,7 @@ function resizeCanvas() {
   ctx.translate(radius, radius);
 }
 
-function drawOutlineHand(ctx, length, width) {
+function drawOutlineHand(ctx, length, width, bgcolor) {
   // Hoofdwijzer (zilverkleurig)
   ctx.beginPath();
   let x = 0;
@@ -93,11 +93,11 @@ function drawOutlineHand(ctx, length, width) {
   console.log("Hand N, x:", x, "y:", y);
 
   ctx.closePath();
-  ctx.fillStyle = "black";
+  ctx.fillStyle = bgcolor;
   ctx.fill();
 }
 
-function drawInsidelineHand(ctx, length, width) {
+function drawInsidelineHand(ctx, length, width, fgcolor) {
   // Hoofdwijzer (zilverkleurig)
   ctx.beginPath();
   let x = (length * 2) / 15;
@@ -136,7 +136,7 @@ function drawInsidelineHand(ctx, length, width) {
   console.log("Hand G1, x:", x, "y:", y);
 
   ctx.closePath();
-  ctx.fillStyle = "red";
+  ctx.fillStyle = fgcolor;
   ctx.fill();
 }
 
@@ -148,12 +148,12 @@ function drawInsidelineHand(ctx, length, width) {
  * @param {number} width - Dikte van de wijzer
  * @param {string} color - Kleur van de wijzer
  */
-function drawHand(ctx, pos, length, width, color = "#c0c0c0") {
+function drawHand(ctx, pos, length, width, bgcolor = "black", fgcolor = "red") {
   ctx.save();
   ctx.rotate(pos);
 
-  drawOutlineHand(ctx, length, width);
-  drawInsidelineHand(ctx, length, width);
+  drawOutlineHand(ctx, length, width, bgcolor);
+  drawInsidelineHand(ctx, length, width, fgcolor);
 
   ctx.restore();
 }
@@ -194,29 +194,29 @@ resizeCanvas();
  * @param {CanvasRenderingContext2D} ctx - Canvas rendering context
  * @param {number} radius - Straal van de klok
  */
-function drawFace(ctx, radius) {
+function drawFace(ctx, radius, bgcolor = "#1a1a1a", bordercolor = "#c0c0c0") {
   // Donkere achtergrond (zoals Breitling)
   ctx.beginPath();
-  ctx.arc(0, 0, radius * 0.975, 0, 2 * Math.PI);
-  ctx.fillStyle = "#1a1a1a"; //"#ebebebff"; //
+  ctx.arc(0, 0, radius * 0.97, 0, 2 * Math.PI);
+  ctx.fillStyle = bgcolor; // "#464040ff"; //"#ebebebff"; //"#1a1a1a";
   ctx.fill();
 
   // Buitenste zilverkleurige ring
-  ctx.strokeStyle = "#c0c0c0";
+  ctx.strokeStyle = bordercolor; //"#c0c0c0";
   ctx.lineWidth = radius * 0.06;
   ctx.stroke();
 
   // Binnenste ring
   ctx.beginPath();
   ctx.arc(0, 0, radius * 0.9, 0, 2 * Math.PI);
-  ctx.strokeStyle = "#808080";
+  ctx.strokeStyle = bordercolor; //"#808080";
   ctx.lineWidth = radius * 0.01;
   ctx.stroke();
 
   // Middenpunt
   ctx.beginPath();
   ctx.arc(0, 0, radius * 0.04, 0, 2 * Math.PI);
-  ctx.fillStyle = "#c0c0c0";
+  ctx.fillStyle = bordercolor; // "#c0c0c0";
   ctx.fill();
 }
 
@@ -310,7 +310,7 @@ function drawNumbers(ctx, radius) {
  * @param {CanvasRenderingContext2D} ctx - Canvas rendering context
  * @param {number} radius - Straal van de klok
  */
-function drawTime(ctx, radius) {
+function drawTime(ctx, radius, bgcolor = "black", fgcolor = "red") {
   const now = new Date();
   let hour = now.getHours() % 12;
   let minute = now.getMinutes();
@@ -323,13 +323,13 @@ function drawTime(ctx, radius) {
     (minute * Math.PI) / (6 * 60) +
     (second * Math.PI) / (360 * 60) -
     Math.PI / 2;
-  console.log("Hour Position (radians):", hourPos);
-  drawHand(ctx, hourPos, radius * 0.45, radius * 0.035, "#c0c0c0");
+
+  drawHand(ctx, hourPos, radius * 0.45, radius * 0.035, bgcolor, fgcolor);
 
   // Minuutwijzer
   let minutePos =
     (minute * Math.PI) / 30 + (second * Math.PI) / (30 * 60) - Math.PI / 2;
-  drawHand(ctx, minutePos, radius * 0.65, radius * 0.025, "#c0c0c0");
+  drawHand(ctx, minutePos, radius * 0.65, radius * 0.025, bgcolor, fgcolor);
 
   // Secondewijzer (dun en rood, zoals chronograaf)
   let secondPos =
@@ -339,25 +339,103 @@ function drawTime(ctx, radius) {
   ctx.beginPath();
   ctx.moveTo(-radius * 0.1, 0);
   ctx.lineTo(radius * 0.75, 0);
-  ctx.strokeStyle = "#ff3333";
+  ctx.strokeStyle = fgcolor;
   ctx.lineWidth = radius * 0.01;
   ctx.stroke();
   ctx.restore();
 }
 
 /**
+ * Tekent datuminformatie in twee boxen naast elkaar ter hoogte van de 3
+ * @param {CanvasRenderingContext2D} ctx - Canvas rendering context
+ * @param {number} radius - Straal van de klok
+ */
+function drawDateInfo(ctx, radius) {
+  const now = new Date();
+
+  const weekdays = ["ZO", "MA", "DI", "WO", "DO", "VR", "ZA"];
+  const weekday = weekdays[now.getDay()];
+  const day = now.getDate();
+
+  const centerX = radius * 0.45;
+  const centerY = 0;
+  const boxWidth = radius * 0.11;
+  const boxHeight = radius * 0.14;
+  const boxSpacing = radius * 0.015;
+
+  // Linker box (weekdag)
+  const weekdayBoxX = centerX - boxWidth / 2 - boxSpacing / 2;
+
+  ctx.fillStyle = "#0a0a0a";
+  ctx.fillRect(
+    weekdayBoxX - boxWidth / 2,
+    centerY - boxHeight / 2,
+    boxWidth,
+    boxHeight
+  );
+
+  ctx.strokeStyle = "#606060";
+  ctx.lineWidth = radius * 0.008;
+  ctx.strokeRect(
+    weekdayBoxX - boxWidth / 2,
+    centerY - boxHeight / 2,
+    boxWidth,
+    boxHeight
+  );
+
+  ctx.fillStyle = "#ff3333";
+  ctx.font = `bold ${radius * 0.07}px Arial`;
+  ctx.textAlign = "center";
+  ctx.textBaseline = "middle";
+  ctx.fillText(weekday, weekdayBoxX, centerY);
+
+  // Rechter box (dag)
+  const dayBoxX = centerX + boxWidth / 2 + boxSpacing / 2;
+
+  ctx.fillStyle = "#0a0a0a";
+  ctx.fillRect(
+    dayBoxX - boxWidth / 2,
+    centerY - boxHeight / 2,
+    boxWidth,
+    boxHeight
+  );
+
+  ctx.strokeStyle = "#606060";
+  ctx.lineWidth = radius * 0.008;
+  ctx.strokeRect(
+    dayBoxX - boxWidth / 2,
+    centerY - boxHeight / 2,
+    boxWidth,
+    boxHeight
+  );
+
+  ctx.fillStyle = "#ffffff";
+  ctx.font = `bold ${radius * 0.09}px Arial`;
+  ctx.textAlign = "center";
+  ctx.textBaseline = "middle";
+  ctx.fillText(day.toString(), dayBoxX, centerY);
+}
+
+/**
  * Hoofdfunctie die de volledige klok tekent in Breitling stijl
  */
+
+let handbgcolor = "#504949ff";
+let handfgcolor = "#ff0000ff";
+
+let facebgcolor = "#88483fff"; //"#1a1a1aff";
+let facebordercolor = "#c0c0c0ff";
+
 function drawClock() {
   ctx.clearRect(-radius, -radius, canvas.width, canvas.height);
 
-  drawFace(ctx, radius);
+  drawFace(ctx, radius, facebgcolor, facebordercolor);
   drawHourMarkers(ctx, radius);
   drawMinuteTicks(ctx, radius);
   drawNumbers(ctx, radius);
   //  drawSubDials(ctx, radius);
-  drawTime(ctx, radius);
-  //  drawDateInfo(ctx, radius);
+  drawDateInfo(ctx, radius);
+  drawTime(ctx, radius, handbgcolor, handfgcolor);
 
   requestAnimationFrame(drawClock);
 }
