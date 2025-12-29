@@ -421,21 +421,21 @@ function drawDateInfo(
  * Hoofdfunctie die de volledige klok tekent in Breitling stijl
  */
 
-let handbgcolor = "#504949ff";
-let handfgcolor = "#ff0000ff";
+let handbgcolor = "#504949";
+let handfgcolor = "#ff0000";
 
-let facebgcolor = "black"; // "#88483fff"; //"#1a1a1aff";
-let facebordercolor = "#c0c0c0ff";
-let facecentercolor = handbgcolor; // "#c0c0c0ff";
+let facebgcolor = "#000000"; // Changed from "black"
+let facebordercolor = "#c0c0c0";
+let facecentercolor = "#504949";
 
-let daybgcolor = "black"; // facebgcolor;
-let daynamecolor = "#ff3333ff";
-let daynumbercolor = "#a0a0a0ff"; // "#ffffffff";
-let dayoutlinecolor = facebordercolor; // "#606060ff";
+let daybgcolor = "#000000"; // Changed from "black"
+let daynamecolor = "#ff3333";
+let daynumbercolor = "#a0a0a0";
+let dayoutlinecolor = "#c0c0c0";
 
-let hourmarkercolor = "#ffffffff";
-let minutetickcolor = "#a0a0a0ff";
-let numbercolor = "#ffffffff";
+let hourmarkercolor = "#ffffff";
+let minutetickcolor = "#a0a0a0";
+let numbercolor = "#ffffff";
 
 let load = 95;
 let count = 0;
@@ -467,6 +467,10 @@ function drawClock() {
 /**
  * Initialiseer color pickers en bind ze aan de klok variabelen
  */
+/**
+ * Initialiseer color pickers en bind ze aan de klok variabelen
+ */
+
 /**
  * Initialiseer color pickers en bind ze aan de klok variabelen
  */
@@ -517,10 +521,19 @@ function initColorPickers() {
     if (picker) {
       picker.addEventListener("input", (e) => {
         colorBindings[elementId](e.target.value);
-        // No need to call drawClock() - it's already running
+        saveColors(); // Auto-save on change
       });
     }
   });
+
+  // Bind export/import/reset buttons
+  document
+    .getElementById("exportColors")
+    .addEventListener("click", exportColors);
+  document
+    .getElementById("importColors")
+    .addEventListener("click", importColors);
+  document.getElementById("resetColors").addEventListener("click", resetColors);
 }
 
 // Event listener voor window resize
@@ -532,6 +545,177 @@ window.addEventListener("resize", () => {
 // Initialize everything when DOM is ready
 window.addEventListener("DOMContentLoaded", () => {
   resizeCanvas();
+  loadSavedColors(); // Load saved colors first
   initColorPickers();
   requestAnimationFrame(drawClock);
 });
+
+/**
+ * Default color configuration
+ */
+const defaultColors = {
+  handbgcolor: "#504949",
+  handfgcolor: "#ff0000",
+  facebgcolor: "#000000",
+  facebordercolor: "#c0c0c0",
+  facecentercolor: "#504949",
+  daybgcolor: "#000000",
+  daynamecolor: "#ff3333",
+  daynumbercolor: "#a0a0a0",
+  dayoutlinecolor: "#c0c0c0",
+  hourmarkercolor: "#ffffff",
+  minutetickcolor: "#a0a0a0",
+  numbercolor: "#ffffff",
+};
+
+/**
+ * Convert any color format to 6-digit hex
+ */
+function normalizeColor(color) {
+  // Create a temporary element to use browser's color parsing
+  const temp = document.createElement("div");
+  temp.style.color = color;
+  document.body.appendChild(temp);
+
+  // Get computed color (will be in rgb format)
+  const computed = window.getComputedStyle(temp).color;
+  document.body.removeChild(temp);
+
+  // Parse rgb(r, g, b) or rgba(r, g, b, a)
+  const match = computed.match(/^rgba?\((\d+),\s*(\d+),\s*(\d+)/);
+  if (match) {
+    const r = parseInt(match[1]).toString(16).padStart(2, "0");
+    const g = parseInt(match[2]).toString(16).padStart(2, "0");
+    const b = parseInt(match[3]).toString(16).padStart(2, "0");
+    return `#${r}${g}${b}`;
+  }
+
+  // If it's already a hex color, remove alpha if present
+  if (color.startsWith("#")) {
+    return color.substring(0, 7); // Keep only #RRGGBB
+  }
+
+  return color;
+}
+
+/**
+ * Get current color configuration
+ */
+function getColorConfig() {
+  return {
+    handbgcolor: normalizeColor(handbgcolor),
+    handfgcolor: normalizeColor(handfgcolor),
+    facebgcolor: normalizeColor(facebgcolor),
+    facebordercolor: normalizeColor(facebordercolor),
+    facecentercolor: normalizeColor(facecentercolor),
+    daybgcolor: normalizeColor(daybgcolor),
+    daynamecolor: normalizeColor(daynamecolor),
+    daynumbercolor: normalizeColor(daynumbercolor),
+    dayoutlinecolor: normalizeColor(dayoutlinecolor),
+    hourmarkercolor: normalizeColor(hourmarkercolor),
+    minutetickcolor: normalizeColor(minutetickcolor),
+    numbercolor: normalizeColor(numbercolor),
+  };
+}
+/**
+ * Apply color configuration
+ */
+function applyColorConfig(config) {
+  handbgcolor = config.handbgcolor || defaultColors.handbgcolor;
+  handfgcolor = config.handfgcolor || defaultColors.handfgcolor;
+  facebgcolor = config.facebgcolor || defaultColors.facebgcolor;
+  facebordercolor = config.facebordercolor || defaultColors.facebordercolor;
+  facecentercolor = config.facecentercolor || defaultColors.facecentercolor;
+  daybgcolor = config.daybgcolor || defaultColors.daybgcolor;
+  daynamecolor = config.daynamecolor || defaultColors.daynamecolor;
+  daynumbercolor = config.daynumbercolor || defaultColors.daynumbercolor;
+  dayoutlinecolor = config.dayoutlinecolor || defaultColors.dayoutlinecolor;
+  hourmarkercolor = config.hourmarkercolor || defaultColors.hourmarkercolor;
+  minutetickcolor = config.minutetickcolor || defaultColors.minutetickcolor;
+  numbercolor = config.numbercolor || defaultColors.numbercolor;
+
+  // Update all color picker values
+  Object.keys(config).forEach((key) => {
+    const picker = document.getElementById(key);
+    if (picker && config[key]) {
+      picker.value = config[key];
+    }
+  });
+}
+
+/**
+ * Export color configuration as JSON file
+ */
+function exportColors() {
+  const config = getColorConfig();
+  const dataStr = JSON.stringify(config, null, 2);
+  const blob = new Blob([dataStr], { type: "application/json" });
+  const url = URL.createObjectURL(blob);
+
+  const link = document.createElement("a");
+  link.href = url;
+  link.download = "clock-colors.json";
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
+  URL.revokeObjectURL(url);
+}
+
+/**
+ * Import color configuration from JSON file
+ */
+function importColors() {
+  const fileInput = document.getElementById("fileInput");
+  fileInput.click();
+
+  fileInput.onchange = (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+
+    const reader = new FileReader();
+    reader.onload = (event) => {
+      try {
+        const config = JSON.parse(event.target.result);
+        applyColorConfig(config);
+      } catch (error) {
+        alert("Error loading color configuration: " + error.message);
+      }
+    };
+    reader.readAsText(file);
+
+    // Reset file input
+    fileInput.value = "";
+  };
+}
+
+/**
+ * Reset colors to default
+ */
+function resetColors() {
+  if (confirm("Reset all colors to default?")) {
+    applyColorConfig(defaultColors);
+  }
+}
+
+/**
+ * Load colors from localStorage on startup
+ */
+function loadSavedColors() {
+  const saved = localStorage.getItem("clockColors");
+  if (saved) {
+    try {
+      const config = JSON.parse(saved);
+      applyColorConfig(config);
+    } catch (error) {
+      console.error("Error loading saved colors:", error);
+    }
+  }
+}
+
+/**
+ * Save colors to localStorage
+ */
+function saveColors() {
+  const config = getColorConfig();
+  localStorage.setItem("clockColors", JSON.stringify(config));
+}

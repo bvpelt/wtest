@@ -8,11 +8,23 @@
     <title>Animations</title>
   </head>
   <body>
-    <
     <div class="container">
       <canvas id="clockCanvas" width="400" height="400"></canvas>
       <div class="color-picker-container">
         <h3>Clock Colors</h3>
+
+        <!-- Add these buttons at the top -->
+        <div class="button-group">
+          <button id="exportColors">Export Colors</button>
+          <button id="importColors">Import Colors</button>
+          <button id="resetColors">Reset to Default</button>
+        </div>
+        <input
+          type="file"
+          id="fileInput"
+          accept=".json"
+          style="display: none"
+        />
 
         <div class="color-input-group">
           <label for="handbgcolor">Hand Background:</label>
