@@ -25,72 +25,72 @@ function drawOutlineHand(ctx, length, width, bgcolor) {
   let x = 0;
   let y = 0;
   ctx.moveTo(x, y); // A N
-  console.log("Hand A, x:", x, "y:", y);
+  //console.log("Hand A, x:", x, "y:", y);
 
   x = 0;
   y = -width * 0.5;
   ctx.lineTo(x, y); // B M
-  console.log("Hand B, x:", x, "y:", y);
+  //console.log("Hand B, x:", x, "y:", y);
 
   x = (length * 1) / 15;
   y = -width * 0.5;
   ctx.lineTo(x, y); // C L
-  console.log("Hand C, x:", x, "y:", y);
+  //console.log("Hand C, x:", x, "y:", y);
 
   x = (length * 2) / 15;
   y = -width * (1 + 0.5);
   ctx.lineTo(x, y); // D K
-  console.log("Hand D, x:", x, "y:", y);
+  //console.log("Hand D, x:", x, "y:", y);
 
   x = (length * 10) / 15;
   y = -width * (1 + 0.5);
   ctx.lineTo(x, y); // E J
-  console.log("Hand E, x:", x, "y:", y);
+  //console.log("Hand E, x:", x, "y:", y);
 
   x = (length * 11) / 15;
   y = -width * 0.5;
   ctx.lineTo(x, y); // F I
-  console.log("Hand F, x:", x, "y:", y);
+  //console.log("Hand F, x:", x, "y:", y);
 
   x = (length * 15) / 15;
   y = -width * 0.5;
   ctx.lineTo(x, y); // G H
-  console.log("Hand G, x:", x, "y:", y);
+  //console.log("Hand G, x:", x, "y:", y);
 
   x = (length * 15) / 15;
   y = +width * 0.5;
   ctx.lineTo(x, y); // H G
-  console.log("Hand H, x:", x, "y:", y);
+  //console.log("Hand H, x:", x, "y:", y);
 
   x = (length * 11) / 15;
   y = +width * 0.5;
   ctx.lineTo(x, y); // I F
-  console.log("Hand I, x:", x, "y:", y);
+  //console.log("Hand I, x:", x, "y:", y);
 
   x = (length * 10) / 15;
   y = +width * (1 + 0.5);
   ctx.lineTo(x, y); // I F
-  console.log("Hand J, x:", x, "y:", y);
+  //console.log("Hand J, x:", x, "y:", y);
 
   x = (length * 2) / 15;
   y = +width * (1 + 0.5);
   ctx.lineTo(x, y); // K D
-  console.log("Hand K, x:", x, "y:", y);
+  //console.log("Hand K, x:", x, "y:", y);
 
   x = (length * 1) / 15;
   y = +width * 0.5;
   ctx.lineTo(x, y); // L C
-  console.log("Hand K, x:", x, "y:", y);
+  //console.log("Hand K, x:", x, "y:", y);
 
   x = 0;
   y = +width * 0.5;
   ctx.lineTo(x, y); // M B
-  console.log("Hand M, x:", x, "y:", y);
+  //console.log("Hand M, x:", x, "y:", y);
 
   x = 0;
   y = 0;
   ctx.lineTo(x, y); // N A
-  console.log("Hand N, x:", x, "y:", y);
+  //console.log("Hand N, x:", x, "y:", y);
 
   ctx.closePath();
   ctx.fillStyle = bgcolor;
@@ -103,37 +103,37 @@ function drawInsidelineHand(ctx, length, width, fgcolor) {
   let x = (length * 2) / 15;
   let y = 0;
   ctx.moveTo(x, y); // A1
-  console.log("Hand A1, x:", x, "y:", y);
+  //console.log("Hand A1, x:", x, "y:", y);
 
   x = (length * (2 + 0.8)) / 15;
   y = -width * (1 - 0.2);
   ctx.lineTo(x, y); // B1
-  console.log("Hand B1, x:", x, "y:", y);
+  //console.log("Hand B1, x:", x, "y:", y);
 
   x = (length * (10 - 0.8)) / 15;
   y = -width * (1 - 0.2);
   ctx.lineTo(x, y); // C1 E1
-  console.log("Hand C1, x:", x, "y:", y);
+  //console.log("Hand C1, x:", x, "y:", y);
 
   x = (length * (11 - 0.8)) / 15;
   y = 0;
   ctx.lineTo(x, y); // D1
-  console.log("Hand D1, x:", x, "y:", y);
+  //console.log("Hand D1, x:", x, "y:", y);
 
   x = (length * (10 - 0.8)) / 15;
   y = +width * (1 - 0.2);
   ctx.lineTo(x, y); // E1 C1
-  console.log("Hand E1, x:", x, "y:", y);
+  //console.log("Hand E1, x:", x, "y:", y);
 
   x = (length * (2 + 0.8)) / 15;
   y = +width * (1 - 0.2);
   ctx.lineTo(x, y); // F1 B1
-  console.log("Hand F1, x:", x, "y:", y);
+  //console.log("Hand F1, x:", x, "y:", y);
 
   x = (length * 2) / 15;
   y = 0;
   ctx.lineTo(x, y); // G1 A1
-  console.log("Hand G1, x:", x, "y:", y);
+  //console.log("Hand G1, x:", x, "y:", y);
 
   ctx.closePath();
   ctx.fillStyle = fgcolor;
@@ -464,11 +464,74 @@ function drawClock() {
   }
 }
 
+/**
+ * Initialiseer color pickers en bind ze aan de klok variabelen
+ */
+/**
+ * Initialiseer color pickers en bind ze aan de klok variabelen
+ */
+function initColorPickers() {
+  // Create a map of element IDs to variable update functions
+  const colorBindings = {
+    handbgcolor: (value) => {
+      handbgcolor = value;
+    },
+    handfgcolor: (value) => {
+      handfgcolor = value;
+    },
+    facebgcolor: (value) => {
+      facebgcolor = value;
+    },
+    facebordercolor: (value) => {
+      facebordercolor = value;
+    },
+    facecentercolor: (value) => {
+      facecentercolor = value;
+    },
+    daybgcolor: (value) => {
+      daybgcolor = value;
+    },
+    daynamecolor: (value) => {
+      daynamecolor = value;
+    },
+    daynumbercolor: (value) => {
+      daynumbercolor = value;
+    },
+    dayoutlinecolor: (value) => {
+      dayoutlinecolor = value;
+    },
+    hourmarkercolor: (value) => {
+      hourmarkercolor = value;
+    },
+    minutetickcolor: (value) => {
+      minutetickcolor = value;
+    },
+    numbercolor: (value) => {
+      numbercolor = value;
+    },
+  };
+
+  // Bind each color picker to its update function
+  Object.keys(colorBindings).forEach((elementId) => {
+    const picker = document.getElementById(elementId);
+    if (picker) {
+      picker.addEventListener("input", (e) => {
+        colorBindings[elementId](e.target.value);
+        // No need to call drawClock() - it's already running
+      });
+    }
+  });
+}
+
 // Event listener voor window resize
 window.addEventListener("resize", () => {
   resizeCanvas();
 });
 
-resizeCanvas();
-
-requestAnimationFrame(drawClock);
+// Roep deze functie aan wanneer de pagina geladen is
+// Initialize everything when DOM is ready
+window.addEventListener("DOMContentLoaded", () => {
+  resizeCanvas();
+  initColorPickers();
+  requestAnimationFrame(drawClock);
+});

@@ -1,14 +1,80 @@
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-        <meta charset="UTF-8">
-        <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <link rel="stylesheet" href="style.css" />
-        <title>Animations</title>
-    </head>
-    <body>
-        <canvas id="clockCanvas" width="400" height="400"></canvas>
-        <script src="clock.js"></script>
-    </body>
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="style.css" />
+    <title>Animations</title>
+  </head>
+  <body>
+    <
+    <div class="container">
+      <canvas id="clockCanvas" width="400" height="400"></canvas>
+      <div class="color-picker-container">
+        <h3>Clock Colors</h3>
+
+        <div class="color-input-group">
+          <label for="handbgcolor">Hand Background:</label>
+          <input type="color" id="handbgcolor" value="#504949" />
+        </div>
+
+        <div class="color-input-group">
+          <label for="handfgcolor">Hand Foreground:</label>
+          <input type="color" id="handfgcolor" value="#ff0000" />
+        </div>
+
+        <div class="color-input-group">
+          <label for="facebgcolor">Face Background:</label>
+          <input type="color" id="facebgcolor" value="#000000" />
+        </div>
+
+        <div class="color-input-group">
+          <label for="facebordercolor">Face Border:</label>
+          <input type="color" id="facebordercolor" value="#c0c0c0" />
+        </div>
+
+        <div class="color-input-group">
+          <label for="facecentercolor">Face Center:</label>
+          <input type="color" id="facecentercolor" value="#504949" />
+        </div>
+
+        <div class="color-input-group">
+          <label for="daybgcolor">Day Background:</label>
+          <input type="color" id="daybgcolor" value="#000000" />
+        </div>
+
+        <div class="color-input-group">
+          <label for="daynamecolor">Day Name:</label>
+          <input type="color" id="daynamecolor" value="#ff3333" />
+        </div>
+
+        <div class="color-input-group">
+          <label for="daynumbercolor">Day Number:</label>
+          <input type="color" id="daynumbercolor" value="#a0a0a0" />
+        </div>
+
+        <div class="color-input-group">
+          <label for="dayoutlinecolor">Day Outline:</label>
+          <input type="color" id="dayoutlinecolor" value="#c0c0c0" />
+        </div>
+
+        <div class="color-input-group">
+          <label for="hourmarkercolor">Hour Markers:</label>
+          <input type="color" id="hourmarkercolor" value="#ffffff" />
+        </div>
+
+        <div class="color-input-group">
+          <label for="minutetickcolor">Minute Ticks:</label>
+          <input type="color" id="minutetickcolor" value="#a0a0a0" />
+        </div>
+
+        <div class="color-input-group">
+          <label for="numbercolor">Numbers:</label>
+          <input type="color" id="numbercolor" value="#ffffff" />
+        </div>
+      </div>
+    </div>
+    <script src="clock.js"></script>
+  </body>
 </html>
