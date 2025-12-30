@@ -1,0 +1,14 @@
+{
+  "handbgcolor": "#504949",
+  "handfgcolor": "#ff0000",
+  "facebgcolor": "#0e2a58",
+  "facebordercolor": "#c0c0c0",
+  "facecentercolor": "#504949",
+  "daybgcolor": "#0e2a58",
+  "daynamecolor": "#ff3333",
+  "daynumbercolor": "#ffffff",
+  "dayoutlinecolor": "#0e2a58",
+  "hourmarkercolor": "#ffffff",
+  "minutetickcolor": "#a0a0a0",
+  "numbercolor": "#ffffff"
+}
